@@ -16,7 +16,7 @@ my $COFFEEMUDDIR = "/root/CoffeeMud";
 # No changes below here
 ###################################################
 
-my $MMC_ver = "0.1.0";
+my $MMC_ver = "0.5.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
