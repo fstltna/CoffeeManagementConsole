@@ -8,15 +8,15 @@ use Term::ANSIScreen qw(cls);
 
 my $StatsFileOutput = "/sbbs/doors/crobots/stats.txt";
 my $FileEditor = "/bin/nano";
-my $CrobotsExe = "/sbbs/doors/crobots/crobots";
 my $InitDName = "/etc/init.d/coffeemud";
 my $COFFEEMUDDIR = "/root/CoffeeMud";
+my $BackupCommand = "/root/CoffeeBackup/coffeebackup.pl";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $MMC_ver = "0.5.0";
+my $MMC_ver = "1.0.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -73,328 +73,8 @@ sub MainMenu
                                       '5', 'Turn Respawn On',
                                       '6', 'Edit mudUNIX.sh',
                                       '7', 'Edit coffeemud.ini',
+                                      '8', 'Backup MUD',
                                       'q', 'Quit CMC' ] );
-}
-
-sub GetBotVersion
-{
-	my $SourceString = shift;
-	my $SourcePos = rindex($SourceString, ':');
-	my $SourceName = substr($SourceString, $SourcePos + 2);
-	$SourceName = substr($SourceName, 0, length($SourceName) - 3);
-	$BotVersion = $SourceName;
-}
-sub GetBotName
-{
-	my $SourceString = shift;
-	my $SourcePos = rindex($SourceString, ':');
-	my $SourceName = substr($SourceString, $SourcePos + 2);
-	$SourceName = substr($SourceName, 0, length($SourceName) - 3);
-	$RobotName = $SourceName;
-}
-
-# Reads and parses header in robot file
-sub ReadBot
-{
-	my $RobotFile = shift;
-	$RobotName = "UnknownRobot";
-	$BotVersion = "???";
-	open(ROBOTFH, '<', $RobotFile) or die "Unable to read robot file $RobotFile: $!";
-	while(<ROBOTFH>)
-	{
-		chop;
-		if (substr($_, 0, 11) eq "/* Version:")
-		{
-			GetBotVersion($_)
-		}
-		elsif (substr($_, 0, 11) eq "/* BotName:")
-		{
-			GetBotName($_)
-		}
-	}
-	close(ROBOTFH);
-}
-
-sub ManageBots
-{
-	my $selectbot = $d->fselect( title => "Select Your Bot To Manage", path => "/sbbs/doors/crobots/robots/users/$UserName" );
-	$selectbot =~ s/\s+/_/g;
-	$selectbot =~ s/</_/g;
-	$selectbot =~ s/>/_/g;
-
-	if ($d->state() ne "OK")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "No robot selected, aborting..." );
-		return;
-	}
-
-	if (substr($selectbot, -2) ne ".r")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "File is not a robot, aborting... To create a bot end the name with \".r\"" );
-		return;
-	}
-
-	my $PathString = "/sbbs/doors/crobots/robots/users/$UserName";
-	if (substr($selectbot, 0, length($PathString)) ne $PathString)
-	{
-		$d->msgbox( title => "Selected Robot:", text => "Can only manage robots you own, aborting..." );
-		return;
-	}
-	# Does selection exist?
-	if (! -f "$selectbot")
-	{
-		# no
-		my $BotNamePos = rindex($selectbot, '/');
-		my $BotName = substr($selectbot, $BotNamePos + 1);
-		$d->msgbox( title => "Selected Robot:", text => "Robot \"$selectbot\" will be created..." );
-		open(MYFH, '>', $selectbot) or die $!;
-		print MYFH "/* Version: 1.0 */\n";
-		print MYFH "/* BotName: $BotName */\n";
-		print MYFH "/* Owner: $UserName */\n";
-		close(MYFH);
-	}
-	system ("$FileEditor \"$selectbot\"");
-}
-
-sub DebugBot
-{
-	my $selectbot = $d->fselect( title => "Select Your Bot To Debug", path => "/sbbs/doors/crobots/robots/users/$UserName" );
-	$selectbot =~ s/\s+/_/g;
-	$selectbot =~ s/</_/g;
-	$selectbot =~ s/>/_/g;
-
-	if ($d->state() ne "OK")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "No robot selected, aborting..." );
-		return;
-	}
-
-	if (substr($selectbot, -2) ne ".r")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "File is not a robot, aborting..." );
-		return;
-	}
-
-	my $PathString = "/sbbs/doors/crobots/robots/users/$UserName";
-	if (substr($selectbot, 0, length($PathString)) ne $PathString)
-	{
-		$d->msgbox( title => "Selected Robot:", text => "Can only debug robots you own, aborting..." );
-		return;
-	}
-	# Does selection exist?
-	if (! -f "$selectbot")
-	{
-		# no
-		$d->msgbox( title => "Selected Robot:", text => "Robot must exist, aborting..." );
-		return;
-	}
-	# Debug the bot
-	my $GameCommand = "$CrobotsExe -d \"$selectbot\"";
-	system($GameCommand);
-	$d->msgbox( title => "Debug Completed", text => "Completed debugging this bot..." );
-}
-
-sub BattleArena
-{
-	my $Mode = shift;
-	if ($Mode eq "Battle")
-	{
-		#$d->msgbox( title => "Chose battle mode", text => "battle on" );
-		$Record = "true";
-	}
-	else
-	{
-		#$d->msgbox( title => "Chose practice mode", text => "testing on" );
-		$Record = "false";
-	}
-	my @selection1 = $d->checklist( title => "Select Testing Robots", text => 'Select up to 3: (If you choose more than 3 only first 3 will be used)',
-                                 list => [ '1', [ 'counter.r', 0 ],
-                                           '2', [ 'rabbit.r', 0 ],
-                                           '3', [ 'rook.r', 1 ],
-                                           '4', [ 'sniper.r', 1 ],
-                                           '5', [ 'target.r', 1 ] ]
-                               );
-
-	my @ActiveRobots = ();
-	my @ActiveRobotsFull = ();
-	my $AddedBots = 0;
-	foreach my $CurBot (@selection1)
-	{
-		if ($AddedBots < 3)
-		{
-			if ($CurBot == 1)
-			{
-				push (@ActiveRobots, "counter.r");
-				push (@ActiveRobotsFull, "/sbbs/doors/crobots/robots/builtin/counter.r");
-			}
-			elsif ($CurBot == 2)
-			{
-				push (@ActiveRobots, "rabbit.r");
-				push (@ActiveRobotsFull, "/sbbs/doors/crobots/robots/builtin/rabbit.r");
-			}
-			elsif ($CurBot == 3)
-			{
-				push (@ActiveRobots, "rook.r");
-				push (@ActiveRobotsFull, "/sbbs/doors/crobots/robots/builtin/rook.r");
-			}
-			elsif ($CurBot == 4)
-			{
-				push (@ActiveRobots, "sniper.r");
-				push (@ActiveRobotsFull, "/sbbs/doors/crobots/robots/builtin/sniper.r");
-			}
-			elsif ($CurBot == 5)
-			{
-				push (@ActiveRobots, "target.r");
-				push (@ActiveRobotsFull, "/sbbs/doors/crobots/robots/builtin/target.r");
-			}
-			$AddedBots++;
-		}
-	}
-	if ($AddedBots > 0)
-	{
-		$d->msgbox( title => "You have selected these training robots:", text => "@ActiveRobots" );
-	}
-	else
-	{
-		$d->msgbox( title => "You have selected these training robots:", text => "No Robots Selected" );
-	}
-	my $NotAbort = -1;
-	while (($AddedBots < 3) && $NotAbort)
-	{
-		my $selectbot = $d->fselect( title => "Select Your or Other Player Bots:", path => "/sbbs/doors/crobots/robots/users/$UserName" );
-		$selectbot =~ s/\s+/_/g;
-		$selectbot =~ s/</_/g;
-		$selectbot =~ s/>/_/g;
-		if ($d->state() ne "OK")
-		{
-			$d->msgbox( title => "Selected Robot:", text => "No robot selected..." );
-			$NotAbort = 0;
-		}
-		else
-		{
-			if (substr($selectbot, -2) ne ".r")
-			{
-				$d->msgbox( title => "Selected Robot:", text => "File is not a robot..." );
-				return;
-			}
-			else
-			{
-				# Does selection exist?
-				if (! -f "$selectbot")
-				{
-					# no
-					$d->msgbox( title => "Selected Robot:", text => "Robot must exist!" );
-				}
-				else
-				{
-					$AddedBots++;
-					push (@ActiveRobotsFull, $selectbot);
-				}
-			}
-		}
-	}
-	my $selectbot = $d->fselect( title => "Select Your Bot To Be Ranked:", path => "/sbbs/doors/crobots/robots/users/$UserName" );
-	$selectbot =~ s/\s+/_/g;
-	$selectbot =~ s/</_/g;
-	$selectbot =~ s/>/_/g;
-	if ($d->state() ne "OK")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "No robot selected, aborting..." );
-		return;
-	}
-	if (substr($selectbot, -2) ne ".r")
-	{
-		$d->msgbox( title => "Selected Robot:", text => "File is not a robot, aborting..." );
-		return;
-	}
-	my $PathString = "/sbbs/doors/crobots/robots/users/$UserName";
-	if (substr($selectbot, 0, length($PathString)) ne $PathString)
-	{
-		$d->msgbox( title => "Selected Robot:", text => "Can only rank robots you own, aborting..." );
-		return;
-	}
-	# Does selection exist?
-	if (! -f "$selectbot")
-	{
-		# no
-		$d->msgbox( title => "Selected Robot:", text => "Robot must exist!" );
-		return;
-	}
-	# Execute the game
-	my $GameCommand = "$CrobotsExe \"$selectbot\"";
-	foreach my $curbot (@ActiveRobotsFull)
-	{
-		$GameCommand = sprintf("%s \"%s\"", $GameCommand, $curbot);
-	}
-	system($GameCommand);
-	# Check results
-	if ($? == 1)
-	{
-		# Command failed - no saving
-		$d->msgbox( title => "Game Progress:", text => "Game Aborted..." );
-		return;
-	}
-	my $DidWin = 1;
-	if ($? > 9)
-	{
-		$DidWin = 0;
-	}
-	if ($Record eq "false")
-	{
-		# Not saving results
-		$d->msgbox( title => "Game Progress:", text => "Game results not being saved..." );
-		return;
-	}
-	# Read In Bot Details
-	ReadBot($selectbot);
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-	$year += 1900;
-	$mon += 1;
-	my $TempOut = "$TempDir/crobots-$year-$mon-$mday-$hour-$min-$sec";
-	my $GameDate = sprintf("%04d%02d%02d", $year, $mon, $mday);
-	open(MYFH, '>', $TempOut) or die "Could not create file '$TempOut' $!";
-	print MYFH "Player=$UserName
-BotName=$RobotName
-BotVersion=$BotVersion
-NumWins=$DidWin
-GameDate=$GameDate
-NumBattles=1\n";
-	close(MYFH);
-}
-
-sub BattleStats
-{
-	my $clear_screen = cls();
-	print $clear_screen;
-	open(my $fh, '<', $StatsFileOutput) or die "Could not open file '$StatsFileOutput' $!";
-	my $NumLine = 0;
-	my $key = "";
-	while (my $row = <$fh>)
-	{
-		chomp $row;
-		print "$row\n";
-		$NumLine++;
-		if ($NumLine == 23)
-		{
-			print "--- Press Any Key For More ---\n";
-			ReadMode 4; # Turn off controls keys
-			while (not defined ($key = ReadKey(-1)))
-			{
-				# No key yet
-			}
-			ReadMode 0; # Reset tty mode before exiting
-			$NumLine = 0;
-		}
-	}
-	#$d->msgbox( title => "Output", text => $StatsFileOutput );
-	print "--- Press Any Key To End ---\n";
-	ReadMode 4; # Turn off controls keys
-	while (not defined ($key = ReadKey(-1)))
-	{
-		# No key yet
-	}
-	ReadMode 0; # Reset tty mode before exiting
-	close ($fh);
 }
 
 while (-1)
@@ -444,6 +124,15 @@ while (-1)
 	{
 		# Edit coffeemud.ini file
 		system("$FileEditor $COFFEEMUDDIR/coffeemud.ini");
+	}
+	elsif ($menuselection eq "8")
+	{
+                # Run a backup
+                system("clear");
+                system("$BackupCommand");
+                print "Press Enter To Continue";
+                my $entered = <STDIN>;
+
 	}
 }
 
