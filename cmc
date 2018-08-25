@@ -11,12 +11,14 @@ my $FileEditor = "/bin/nano";
 my $InitDName = "/etc/init.d/coffeemud";
 my $COFFEEMUDDIR = "/root/CoffeeMud";
 my $BackupCommand = "/root/CoffeeBackup/coffeebackup.pl";
+my $MUDLog = "/root/CoffeeMud/mud.log";
+my $Pager = "/usr/bin/less";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $MMC_ver = "1.0.0";
+my $MMC_ver = "1.1.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -74,6 +76,7 @@ sub MainMenu
                                       '6', 'Edit mudUNIX.sh',
                                       '7', 'Edit coffeemud.ini',
                                       '8', 'Backup MUD',
+                                      '9', 'View MUD Log',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -132,7 +135,11 @@ while (-1)
                 system("$BackupCommand");
                 print "Press Enter To Continue";
                 my $entered = <STDIN>;
-
+	}
+	elsif ($menuselection eq "9")
+	{
+                # View the log file
+                system("$Pager $MUDLog");
 	}
 }
 
