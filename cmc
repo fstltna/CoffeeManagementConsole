@@ -6,7 +6,6 @@ use UI::Dialog;
 use Term::ReadKey;
 use Term::ANSIScreen qw(cls);
 
-my $StatsFileOutput = "/sbbs/doors/crobots/stats.txt";
 my $FileEditor = "/bin/nano";
 my $InitDName = "/etc/init.d/coffeemud";
 my $COFFEEMUDDIR = "/root/CoffeeMud";
