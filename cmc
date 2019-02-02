@@ -143,6 +143,7 @@ while (-1)
 	}
 	elsif ($menuselection eq "10")
 	{
+		my $running=`ps ax|grep coffee_mud|grep -v grep`;
 	        if ($running ne "")
 		{
 			# Process is running, kill it
