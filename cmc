@@ -17,7 +17,7 @@ my $Pager = "/usr/bin/less";
 # No changes below here
 ###################################################
 
-my $MMC_ver = "1.1.0";
+my $MMC_ver = "1.2.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -76,6 +76,7 @@ sub MainMenu
                                       '7', 'Edit coffeemud.ini',
                                       '8', 'Backup MUD',
                                       '9', 'View MUD Log',
+                                      '10', 'Kill MUD Process',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -139,6 +140,15 @@ while (-1)
 	{
                 # View the log file
                 system("$Pager $MUDLog");
+	}
+	elsif ($menuselection eq "10")
+	{
+	        if ($running ne "")
+		{
+			# Process is running, kill it
+			system("killall java");
+			sleep(5);
+		}
 	}
 }
 
