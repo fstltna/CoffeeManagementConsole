@@ -104,7 +104,7 @@ while (-1)
 	elsif ($menuselection eq "3")
 	{
 		$d->msgbox( text => "To exit the CoffeeMUD console and return to CMC press CTRL-A CTRL-D" );
-		system("screen -r");
+		system("screen -r Coffeemud");
 	}
 	elsif ($menuselection eq "4")
 	{
