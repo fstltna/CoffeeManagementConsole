@@ -132,6 +132,7 @@ sub UpdateTools
 			}
 			system("cp $StartupDir/coffeemud $BinDir");
 			system("cp $StartupDir/startcoffeemud $COFFEEMUDDIR");
+			system("cp $StartupDir/InstallUNIX-auto.sh $COFFEEMUDDIR");
 		}
 	}
 }
