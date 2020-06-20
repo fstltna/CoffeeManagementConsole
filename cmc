@@ -23,7 +23,7 @@ my $DEBUG_MODE = "off";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.4.2";
+my $CMC_ver = "1.5.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -159,6 +159,7 @@ sub MainMenu
                                       '10', 'Kill MUD Process',
                                       '11', 'Edit intro.txt',
                                       '12', 'Update Utils',
+                                      '13', 'Update CM',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -246,6 +247,16 @@ while (-1)
 	{
 		# Update Menu
 		UpdateTools();
+	}
+	elsif ($menuselection eq "13")
+	{
+		# Rebuild CoffeeMud
+		chdir($COFFEEMUDDIR);
+		system("cp coffeemud.ini coffeemud.ini-keep");
+		system("./InstallUNIX-auto.sh");
+		system("cp coffeemud.ini-keep coffeemud.ini");
+		print "Press Enter To Continue: ";
+		my $entered = <STDIN>;
 	}
 
 }
