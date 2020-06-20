@@ -1,4 +1,4 @@
-# CoffeeMUD Management Console (1.4.0)
+# CoffeeMUD Management Console (1.4.1)
 Allows you to manage your CoffeeMUD server with a text based GUI - 
 Official support sites: [Official Github Repo](https://github.com/fstltna/CoffeeManagementConsole) - [Official Forum](https://pocketmud.com/index.php/forum/server-utils)
 
@@ -7,7 +7,7 @@ Official support sites: [Official Github Repo](https://github.com/fstltna/Coffee
 
 ---
 
-Edit "cmc" and change the settings at the top if your CoffeeMUD server is not in /root/CoffeeMud.
+Edit "cmc" and change the settings at the top if your CoffeeMUD server is not in /home/cmowner/CoffeeMud.
 
 You will need to run cpan and install these modules:
 

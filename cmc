@@ -7,17 +7,23 @@ use Term::ReadKey;
 use Term::ANSIScreen qw(cls);
 
 my $FileEditor = "/bin/nano";
-my $InitDName = "/etc/init.d/coffeemud";
-my $COFFEEMUDDIR = "/root/CoffeeMud";
-my $BackupCommand = "/root/CoffeeBackup/coffeebackup.pl";
-my $MUDLog = "/root/CoffeeMud/mud.log";
+my $InitDName = "/home/cmowner/bin/coffeemud";
+my $COFFEEMUDDIR = "/home/cmowner/CoffeeMud";
+my $BackupCommand = "/home/cmowner/CoffeeBackup/coffeebackup.pl";
+my $MUDLog = "/home/cmowner/CoffeeMud/mud.log";
 my $Pager = "/usr/bin/less";
+my $CMCDir = "/home/cmowner/MinetestManagementConsole";
+my $BackupToolDir = "/home/cmowner/MineBackup";
+my $StartupDir = "/home/cmowner/MinetestStartup";
+my $UpdateCommand = "/usr/bin/git pull";
+my $BinDir = "/home/cmowner/bin";
+my $DEBUG_MODE = "off";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $MMC_ver = "1.4.0";
+my $CMC_ver = "1.4.1";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -25,7 +31,19 @@ my $BotVersion = "";
 my $UserName = "";
 my $ServerStatus = "foo";
 
-my $d = new UI::Dialog ( backtitle => "CoffeeMUD Management Console v$MMC_ver", height => 20, width => 65, listheight => 5,
+sub PrintDebugCommand
+{
+	if ($DEBUG_MODE eq "off")
+	{
+		return;
+	}
+	my $PassedString = shift;
+	print "About to run:\n$PassedString\n";
+	print "Press Enter To Run This:";
+	my $entered = <STDIN>;
+}
+
+my $d = new UI::Dialog ( backtitle => "CoffeeMUD Management Console v$CMC_ver", height => 20, width => 65, listheight => 5,
 	order => [ 'ascii', 'cdialog', 'xdialog' ]);
 
 my $windowtitle = "Welcome to the CoffeeMUD Management Console!";
@@ -57,6 +75,62 @@ sub CheckServerStatus
 
 }
 
+sub DoUpdate
+{
+	my $DesiredDir = $_[0];
+
+	# Update desired utility
+	chdir ($DesiredDir);
+	PrintDebugCommand("Running $UpdateCommand in $DesiredDir\n");
+	system("$UpdateCommand");
+	print "Press Enter To Continue";
+	my $entered = <STDIN>;
+}
+
+sub UpdateToolsMenu
+{
+	my $WantRespawn="ON";
+	CheckServerStatus();
+	if (-f "$COFFEEMUDDIR/nostart")
+	{
+		$WantRespawn="OFF";
+	}
+	$menuselection = $d->menu( title => "Backup Tools Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+                            list => [ '1', 'Update CMC',
+                                      '2', 'Update Backup',
+                                      '3', 'Update Startup',
+                                      'q', 'Main Menu' ] );
+}
+
+sub UpdateTools
+{
+	while (-1)
+	{
+		UpdateToolsMenu();
+		if (($menuselection eq "CANCEL") || ($menuselection eq "ESC") || ($menuselection eq "") || ($menuselection eq "q") || ($menuselection eq "Q"))
+		{
+			return;
+		}
+		elsif ($menuselection eq "1")
+		{
+			# Update CMC
+			DoUpdate($CMCDir);
+		}
+		elsif ($menuselection eq "2")
+		{
+			# Update BackupToolDir
+			DoUpdate($BackupToolDir);
+		}
+		elsif ($menuselection eq "3")
+		{
+			# Update Startup
+			DoUpdate($StartupDir);
+			system("cp $StartupDir/coffeemud $BinDir");
+			system("cp $StartupDir/startcoffeemud $COFFEEMUDDIR");
+		}
+	}
+}
+
 sub MainMenu
 {
 	my $WantRespawn="ON";
@@ -78,6 +152,7 @@ sub MainMenu
                                       '9', 'View MUD Log',
                                       '10', 'Kill MUD Process',
                                       '11', 'Edit intro.txt',
+                                      '12', 'Update Utils',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -161,6 +236,12 @@ while (-1)
 		# Edit intro.txt file
 		system("$FileEditor $COFFEEMUDDIR/resources/text/intro.txt");
 	}
+	elsif ($menuselection eq "12")
+	{
+		# Update Menu
+		UpdateTools();
+	}
+
 }
 
 exit 0;
