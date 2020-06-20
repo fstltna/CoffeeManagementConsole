@@ -253,6 +253,15 @@ while (-1)
 		# Rebuild CoffeeMud
 		my $entered = "";
 		chdir($COFFEEMUDDIR);
+		system("touch $COFFEEMUDDIR/nostart");
+		my $running=`ps ax|grep coffee_mud|grep -v grep`;
+		if ($running ne "")
+		{
+			# Process is running, kill it
+			print "Killing CoffeeMud process:\n";
+			system("killall java");
+			sleep(5);
+		}
 		system("cp coffeemud.ini coffeemud.ini-keep");
 		system("git pull");
 		print "Do you want to recompile CoffeeMud? (N/y): ";
@@ -264,6 +273,7 @@ while (-1)
 			print "Press Enter To Continue: ";
 			$entered = <STDIN>;
 		}
+		unlink("$COFFEEMUDDIR/nostart");
 	}
 
 }
