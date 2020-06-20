@@ -1,4 +1,4 @@
-# CoffeeMUD Management Console (1.4.1)
+# CoffeeMUD Management Console (1.4.2)
 Allows you to manage your CoffeeMUD server with a text based GUI - 
 Official support sites: [Official Github Repo](https://github.com/fstltna/CoffeeManagementConsole) - [Official Forum](https://pocketmud.com/index.php/forum/server-utils)
 
@@ -9,7 +9,7 @@ Official support sites: [Official Github Repo](https://github.com/fstltna/Coffee
 
 Edit "cmc" and change the settings at the top if your CoffeeMUD server is not in /home/cmowner/CoffeeMud.
 
-You will need to run cpan and install these modules:
+You will need to run cpan (as root) and install these modules:
 
 - cpan -i UI::Dialog
 - cpan -i Term::ReadKey
@@ -17,4 +17,7 @@ You will need to run cpan and install these modules:
 
 You also need to have my CoffeeMUD Startup Script installed.
 
-Then copy "cmc" into a directory in your path and you should be ok.
+I suggest you then add this to your /home/cmowner/.bashrc file:
+	export PATH=/home/cmowner/bin:/home/cmowner/CoffeeManagementConsole:$PATH
+
+After that you should log out and back in and now "cmc" should work.

@@ -125,6 +125,11 @@ sub UpdateTools
 		{
 			# Update Startup
 			DoUpdate($StartupDir);
+			if (! -d $BinDir)
+			{
+				print "Binary dir $BinDir not found, creating...\n";
+				system("mkdir -p $BinDir");
+			}
 			system("cp $StartupDir/coffeemud $BinDir");
 			system("cp $StartupDir/startcoffeemud $COFFEEMUDDIR");
 		}
