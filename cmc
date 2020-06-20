@@ -95,7 +95,7 @@ sub UpdateToolsMenu
 	{
 		$WantRespawn="OFF";
 	}
-	$menuselection = $d->menu( title => "Backup Tools Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+	$menuselection = $d->menu( title => "Update Tools Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
                             list => [ '1', 'Update CMC',
                                       '2', 'Update Backup',
                                       '3', 'Update Startup',
