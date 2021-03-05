@@ -23,7 +23,7 @@ my $DEBUG_MODE = "off";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.6.1";
+my $CMC_ver = "1.6.2";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
