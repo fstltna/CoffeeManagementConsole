@@ -18,12 +18,13 @@ my $StartupDir = "/home/cmowner/CoffeeStartup";
 my $UpdateCommand = "/usr/bin/git pull";
 my $BinDir = "/home/cmowner/bin";
 my $DEBUG_MODE = "off";
+my $MUDPORT = "5555";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.6.2";
+my $CMC_ver = "1.6.3";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -160,6 +161,7 @@ sub MainMenu
                                       '11', 'Edit intro.txt',
                                       '12', 'Update Utils',
                                       '13', 'Update CM',
+                                      '14', 'Connect MUD',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -274,6 +276,14 @@ while (-1)
 			$entered = <STDIN>;
 		}
 		unlink("$COFFEEMUDDIR/nostart");
+	}
+	elsif ($menuselection eq "14")
+	{
+		# Telnet to MUD
+                system("clear");
+		system("telnet localhost $MUDPORT");
+		print "Press Enter To Continue: ";
+		my $entered = <STDIN>;
 	}
 
 }
