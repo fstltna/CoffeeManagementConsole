@@ -19,12 +19,13 @@ my $UpdateCommand = "/usr/bin/git pull";
 my $BinDir = "/home/cmowner/bin";
 my $DEBUG_MODE = "off";
 my $MUDPORT = "5555";
+my $TEXTDIR = "$COFFEEMUDDIR/resources/text";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.6.3";
+my $CMC_ver = "1.7.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -86,6 +87,138 @@ sub DoUpdate
 	system("$UpdateCommand");
 	print "Press Enter To Continue";
 	my $entered = <STDIN>;
+}
+
+sub EditTextMenu
+{
+	my $WantRespawn="ON";
+	CheckServerStatus();
+	if (-f "$COFFEEMUDDIR/nostart")
+	{
+		$WantRespawn="OFF";
+	}
+	$menuselection = $d->menu( title => "Edit Text Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+                            list => [ '1', 'Blocked',
+                                      '2', 'Classes',
+                                      '3', 'Conblocked',
+                                      '4', 'Credits',
+                                      '5', 'DoneAcct.',
+                                      '6', 'Down',
+                                      '7', 'Email',
+                                      '8', 'Inclination',
+                                      '9', 'Newacct',
+                                      '10', 'NewCharDone',
+                                      '11', 'NewChar',
+                                      '12', 'NoLogins',
+                                      '13', 'Offline',
+                                      '14', 'Races',
+                                      '15', 'Rules',
+                                      '16', 'SelChar',
+                                      '17', 'Stats',
+                                      '18', 'Themes',
+                                      'q', 'Main Menu' ] );
+}
+
+sub EditText
+{
+	while (-1)
+	{
+		EditTextMenu();
+		if (($menuselection eq "CANCEL") || ($menuselection eq "ESC") || ($menuselection eq "") || ($menuselection eq "q") || ($menuselection eq "Q"))
+		{
+			return;
+		}
+		elsif ($menuselection eq "1")
+		{
+			# Edit blocked.txt file
+			system("$FileEditor $TEXTDIR/blocked.txt");
+		}
+		elsif ($menuselection eq "2")
+		{
+			# Edit classes.txt file
+			system("$FileEditor $TEXTDIR/classes.txt");
+		}
+		elsif ($menuselection eq "3")
+		{
+			# Edit conblocked.txt file
+			system("$FileEditor $TEXTDIR/conblocked.txt");
+		}
+		elsif ($menuselection eq "4")
+		{
+			# Edit conblocked.txt file
+			system("$FileEditor $TEXTDIR/credits.txt");
+		}
+		elsif ($menuselection eq "5")
+		{
+			# Edit doneacct.txt file
+			system("$FileEditor $TEXTDIR/doneacct.txt");
+		}
+		elsif ($menuselection eq "6")
+		{
+			# Edit down.txt file
+			system("$FileEditor $TEXTDIR/down.txt");
+		}
+		elsif ($menuselection eq "7")
+		{
+			# Edit email.txt file
+			system("$FileEditor $TEXTDIR/email.txt");
+		}
+		elsif ($menuselection eq "8")
+		{
+			# Edit inclination.txt file
+			system("$FileEditor $TEXTDIR/inclination.txt");
+		}
+		elsif ($menuselection eq "9")
+		{
+			# Edit newacct.txt file
+			system("$FileEditor $TEXTDIR/newacct.txt");
+		}
+		elsif ($menuselection eq "10")
+		{
+			# Edit newchardone.txt file
+			system("$FileEditor $TEXTDIR/newchardone.txt");
+		}
+		elsif ($menuselection eq "11")
+		{
+			# Edit newchar.txt file
+			system("$FileEditor $TEXTDIR/newchar.txt");
+		}
+		elsif ($menuselection eq "12")
+		{
+			# Edit nologins.txt file
+			system("$FileEditor $TEXTDIR/nologins.txt");
+		}
+		elsif ($menuselection eq "13")
+		{
+			# Edit offline.txt file
+			system("$FileEditor $TEXTDIR/offline.txt");
+		}
+		elsif ($menuselection eq "14")
+		{
+			# Edit races.txt file
+			system("$FileEditor $TEXTDIR/races.txt");
+		}
+		elsif ($menuselection eq "15")
+		{
+			# Edit rules.txt file
+			system("$FileEditor $TEXTDIR/rules.txt");
+		}
+		elsif ($menuselection eq "16")
+		{
+			# Edit selchar.txt file
+			system("$FileEditor $TEXTDIR/selchar.txt");
+		}
+		elsif ($menuselection eq "17")
+		{
+			# Edit stats.txt file
+			system("$FileEditor $TEXTDIR/stats.txt");
+		}
+		elsif ($menuselection eq "18")
+		{
+			# Edit themes.txt file
+			system("$FileEditor $TEXTDIR/themes.txt");
+		}
+	}
 }
 
 sub UpdateToolsMenu
@@ -162,6 +295,7 @@ sub MainMenu
                                       '12', 'Update Utils',
                                       '13', 'Update CM',
                                       '14', 'Connect MUD',
+                                      '15', 'Edit Text',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -243,7 +377,7 @@ while (-1)
 	elsif ($menuselection eq "11")
 	{
 		# Edit intro.txt file
-		system("$FileEditor $COFFEEMUDDIR/resources/text/intro.txt");
+		system("$FileEditor $TEXTDIR/intro.txt");
 	}
 	elsif ($menuselection eq "12")
 	{
@@ -284,6 +418,11 @@ while (-1)
 		system("telnet localhost $MUDPORT");
 		print "Press Enter To Continue: ";
 		my $entered = <STDIN>;
+	}
+	elsif ($menuselection eq "15")
+	{
+		# Text File Menu
+		EditText();
 	}
 
 }
