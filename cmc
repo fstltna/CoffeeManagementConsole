@@ -9,7 +9,7 @@ use Term::ANSIScreen qw(cls);
 my $FileEditor = "/bin/nano";
 my $InitDName = "/home/cmowner/bin/coffeemud";
 my $COFFEEMUDDIR = "/home/cmowner/CoffeeMud";
-my $BackupCommand = "/home/cmowner/CoffeeBackup/coffeebackup.pl";
+my $BackupCommand = "/home/cmowner/CoffeeBackup/coffeebackup.pl -snapshot";
 my $MUDLog = "/home/cmowner/CoffeeMud/mud.log";
 my $Pager = "/usr/bin/less";
 my $CMCDir = "/home/cmowner/CoffeemudManagementConsole";
@@ -25,7 +25,7 @@ my $TEXTDIR = "$COFFEEMUDDIR/resources/text";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.7.1";
+my $CMC_ver = "1.8.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
