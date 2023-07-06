@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Installing perl dependancies"
+cpan -i UI::Dialog
+cpan -i Term::ReadKey
+cpan -i Term::ANSIScreen
+echo "Done."
+exit 0
