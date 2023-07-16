@@ -56,7 +56,7 @@ my $windowtitle = "Welcome to the CoffeeMUD Management Console!";
 my $enjoyedtitle = "We hope you enjoyed CMC!";
 my $introtext =
 "This is the CoffeeMUD Management Console, a utility for CoffeeMUD operators
-to manage their servers from a text GUI rather than the command line.";
+to manage their servers from a text UI rather than the command line.";
 
 $d->msgbox( title => $windowtitle, text => $introtext );
 
