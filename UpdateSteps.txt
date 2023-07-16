@@ -1,0 +1,22 @@
+Update steps:
+========================================
+
+1) Run a backup of the whole mud. #8 in cmc
+
+2) create a new database:
+	mysql -p -u coffeemud
+	<put in your mysql password>
+	create database coffeemud2;
+	quit
+
+3) backup fakedb using option #13, #2 in cmc
+
+4) Update CoffeeMUD using option #13, #3 in cmc
+
+When updating the schema you will be asked for the "old" and "new" fakedb
+locations. Use these:
+FAKEDBOLD: /home/cmowner/CoffeeMud/oldcm/resources/fakedb
+FAKEDBNEW: /home/cmowner/CoffeeMud/resources/fakedb
+
+The old database is "coffeemud". We are setting up the new one as "coffeemud2"
+If you have already updated before then use coffeemud3, etc...
