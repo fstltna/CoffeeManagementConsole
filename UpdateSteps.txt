@@ -21,7 +21,8 @@ FAKEDBNEW: /home/cmowner/CoffeeMud/resources/fakedb
 The old database is "coffeemud". We are setting up the new one as "coffeemud2"
 If you have already updated before then use coffeemud3, etc...
 
-5) edit coffeemud.ini to change the DBSERVICE to the coffeemud# you just did in the previous step. Make it look like this:
+5) edit coffeemud.ini using #13, #5 to change the DBSERVICE to the coffeemud#
+   you just did in the previous step. Make it look like this:
 DBSERVICE=jdbc\:mysql\://localhost\:3306/coffeemud2
 
 6) Should be all set!

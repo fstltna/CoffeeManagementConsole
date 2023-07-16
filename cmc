@@ -350,14 +350,14 @@ sub UpdateCM
 			}
 			system("cp coffeemud.ini coffeemud.ini-keep");
 			system("git pull");
+			print "Did it work? If not address the issues and rerun this step again.\nPress Enter To Continue: ";
+			$entered = <STDIN>;
 			print "Do you want to recompile CoffeeMud? (N/y): ";
 			$entered = <STDIN>;
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
 				system("./InstallUNIX-auto.sh");
 				system("cp coffeemud.ini-keep coffeemud.ini");
-				print "Press Enter To Continue: ";
-				$entered = <STDIN>;
 			}
 		}
 		elsif ($menuselection eq "4")
