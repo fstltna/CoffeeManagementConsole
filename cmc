@@ -284,7 +284,7 @@ sub UpdateCMMenu
 		$WantRespawn="OFF";
 	}
 
-	$menuselection = $d->menu( title => "Main Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+	$menuselection = $d->menu( title => "CoffeeMUD Update Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
                             list => [ '1', 'How to Update',
                                       '2', 'Backup MUD',
                                       '3', 'Backup fakedb',
