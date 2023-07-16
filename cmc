@@ -286,10 +286,11 @@ sub UpdateCMMenu
 
 	$menuselection = $d->menu( title => "Main Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
                             list => [ '1', 'How to Update',
-                                      '2', 'Backup fakedb',
-                                      '3', 'Update CM',
-                                      '4', 'Fix Schema',
-                                      '5', 'Edit coffeemud.ini',
+                                      '2', 'Backup MUD',
+                                      '3', 'Backup fakedb',
+                                      '4', 'Update CM',
+                                      '5', 'Fix Schema',
+                                      '6', 'Edit coffeemud.ini',
                                       'q', 'Main Menu' ] );
 }
 
@@ -317,6 +318,14 @@ sub UpdateCM
 		}
 		elsif ($menuselection eq "2")
 		{
+			# Run a backup
+			system("clear");
+			system("$BackupCommand");
+			print "Press Enter To Continue";
+			my $entered = <STDIN>;
+		}
+		elsif ($menuselection eq "3")
+		{
 			# Backup fakedb
 			system("clear");
 			if (! -d $FAKEDBOLDDIR)
@@ -328,7 +337,7 @@ sub UpdateCM
 			print "Fakedb settings copied\n";
 			sleep(5);
 		}
-		elsif ($menuselection eq "3")
+		elsif ($menuselection eq "4")
 		{
 			# Rebuild CoffeeMud
 			system("clear");
@@ -360,12 +369,12 @@ sub UpdateCM
 				system("cp coffeemud.ini-keep coffeemud.ini");
 			}
 		}
-		elsif ($menuselection eq "4")
+		elsif ($menuselection eq "5")
 		{
 			# Fix Schema
 			FixSchema();
 		}
-		elsif ($menuselection eq "5")
+		elsif ($menuselection eq "6")
 		{
 			# Edit coffeemud.ini file
 			system("$FileEditor $COFFEEMUDDIR/coffeemud.ini");
