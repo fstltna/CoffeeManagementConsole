@@ -367,6 +367,7 @@ sub UpdateCM
 			$entered = <STDIN>;
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
+				chdir($COFFEEMUDDIR);
 				system("./InstallUNIX-auto.sh");
 				if ($DidBuild eq "y")
 				{
