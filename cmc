@@ -369,7 +369,6 @@ sub UpdateCM
 			chop($entered);
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
-print "Saw yes\n";
 				chdir($COFFEEMUDDIR);
 				system("./InstallUNIX-auto.sh");
 				if ($DidBuild eq "y")
