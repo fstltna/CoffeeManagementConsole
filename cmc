@@ -344,6 +344,7 @@ sub UpdateCM
 			print "Do you want to pull updates from the repo (N/y): ";
 			my $entered = <STDIN>;
 			my $DidBuild = "n";
+			chop($entered);
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
 				$entered = "";
@@ -365,8 +366,10 @@ sub UpdateCM
 			}
 			print "Do you want to recompile CoffeeMud? (N/y): ";
 			$entered = <STDIN>;
+			chop($entered);
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
+print "Saw yes\n";
 				chdir($COFFEEMUDDIR);
 				system("./InstallUNIX-auto.sh");
 				if ($DidBuild eq "y")
