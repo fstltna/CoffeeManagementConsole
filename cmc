@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.9.0";
+my $CMC_ver = "1.10.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
