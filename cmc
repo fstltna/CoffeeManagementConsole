@@ -341,33 +341,40 @@ sub UpdateCM
 		{
 			# Rebuild CoffeeMud
 			system("clear");
-			if (! -d $FAKEDBOLDDIR)
+			print "Do you want to pull updates from the repo (N/y): ";
+			my $entered = <STDIN>;
+			my $DidBuild = "n";
+			if (($entered eq "y") || ($entered eq "Y"))
 			{
-				print "$FAKEDBOLDDIR doesnt exist, please run \#2:\n";
-				return;
+				$entered = "";
+				$DidBuild = "y";
+				chdir($COFFEEMUDDIR);
+				system("touch $COFFEEMUDDIR/nostart");
+				my $running=`ps ax|grep coffee_mud|grep -v grep`;
+				if ($running ne "")
+				{
+					# Process is running, kill it
+					print "Killing CoffeeMud process:\n";
+					system("killall java");
+					sleep(5);
+				}
+				system("cp coffeemud.ini coffeemud.ini-keep");
+				system("git pull");
+				print "Did it work? If not address the issues and rerun this step again.\nPress Enter To Continue: ";
+				$entered = <STDIN>;
 			}
-			my $entered = "";
-			chdir($COFFEEMUDDIR);
-			system("touch $COFFEEMUDDIR/nostart");
-			my $running=`ps ax|grep coffee_mud|grep -v grep`;
-			if ($running ne "")
-			{
-				# Process is running, kill it
-				print "Killing CoffeeMud process:\n";
-				system("killall java");
-				sleep(5);
-			}
-			system("cp coffeemud.ini coffeemud.ini-keep");
-			system("git pull");
-			print "Did it work? If not address the issues and rerun this step again.\nPress Enter To Continue: ";
-			$entered = <STDIN>;
 			print "Do you want to recompile CoffeeMud? (N/y): ";
 			$entered = <STDIN>;
 			if (($entered eq "y") || ($entered eq "Y"))
 			{
 				system("./InstallUNIX-auto.sh");
-				system("cp coffeemud.ini-keep coffeemud.ini");
+				if ($DidBuild eq "y")
+				{
+					system("cp coffeemud.ini-keep coffeemud.ini");
+				}
 			}
+			print "All done! Press ENTER to continue: ";
+			$entered = <STDIN>;
 		}
 		elsif ($menuselection eq "5")
 		{
