@@ -1,5 +1,5 @@
-# CoffeeMUD Management Console (1.10.0)
-Allows you to manage your CoffeeMUD server with a text based GUI - 
+# CoffeeMUD Management Console (1.11.1)
+Allows you to manage your CoffeeMUD server with a text based UI - 
 Official support sites: [Official Github Repo](https://github.com/fstltna/CoffeeManagementConsole) - [Official Forum](https://pocketmud.com/index.php/forum/server-utils)
 
 

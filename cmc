@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.11.0";
+my $CMC_ver = "1.11.1";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -101,7 +101,7 @@ sub EditTextMenu
 	{
 		$WantRespawn="OFF";
 	}
-	$menuselection = $d->menu( title => "Edit Text Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+	$menuselection = $d->menu( title => "Edit Text Files Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
                             list => [ '1', 'Blocked',
                                       '2', 'Classes',
                                       '3', 'Conblocked',
@@ -233,7 +233,7 @@ sub UpdateToolsMenu
 	{
 		$WantRespawn="OFF";
 	}
-	$menuselection = $d->menu( title => "Update Tools Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+	$menuselection = $d->menu( title => "Update Utilities Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
                             list => [ '1', 'Update CMC',
                                       '2', 'Update Backup',
                                       '3', 'Update Startup',
@@ -288,7 +288,7 @@ sub UpdateCMMenu
                             list => [ '1', 'How to Update',
                                       '2', 'Backup MUD',
                                       '3', 'Backup fakedb',
-                                      '4', 'Update CM',
+                                      '4', 'Update CoffeMud',
                                       '5', 'Fix Schema',
                                       '6', 'Edit coffeemud.ini',
                                       'q', 'Main Menu' ] );
@@ -405,7 +405,7 @@ sub MainMenu
                             list => [ '1', 'Start Watchdog',
                                       '2', 'Stop Watchdog',
                                       '3', 'Server Console',
-                                      '4', 'Turn Off Respawn',
+                                      '4', 'Turn Respawn Off',
                                       '5', 'Turn Respawn On',
                                       '6', 'Edit mudUNIX.sh',
                                       '7', 'Edit coffeemud.ini',
@@ -414,9 +414,9 @@ sub MainMenu
                                       '10', 'Kill MUD Process',
                                       '11', 'Edit intro.txt',
                                       '12', 'Update Utils',
-                                      '13', 'Update CM',
+                                      '13', 'Update CoffeeMud',
                                       '14', 'Connect MUD',
-                                      '15', 'Edit Text',
+                                      '15', 'Edit Texts',
                                       'q', 'Quit CMC' ] );
 }
 
