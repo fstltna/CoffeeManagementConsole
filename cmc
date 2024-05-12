@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.11.1";
+my $CMC_ver = "1.12.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -392,6 +392,50 @@ sub UpdateCM
 	}
 }
 
+sub ProcesKillMenu
+{
+        my $WantRespawn="ON";
+        CheckServerStatus();
+        if (-f "$COFFEEMUDDIR/nostart")
+        {
+                $WantRespawn="OFF";
+        }
+
+        $menuselection = $d->menu( title => "Process Kill Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+                            list => [ '1', 'Request Clean',
+                                      '2', 'Force Kill',
+                                      'q', 'Main Menu' ] );
+}
+
+sub ProcessKill
+{
+        while (-1)
+        {
+                ProcesKillMenu();
+                if (($menuselection eq "CANCEL") || ($menuselection eq "ESC") || ($menuselection eq "") || ($menuselection eq "q") || ($menuselection eq "Q"))
+                {
+                        return;
+                }
+                elsif ($menuselection eq "1")
+                {
+                        # Reset the server process
+                        print "Killing mud process, please wait...";
+                        system("killall java");
+			sleep(10);
+                }
+                elsif ($menuselection eq "2")
+                {
+                        # Force-kill server process
+                        if ($d->yesno( text => "Confirm force-killing MUD process", text => "Are you *SURE* you want to force kill the MUD process?\nYou should first try the \#1 option and see if that works" ))
+                        {
+                                print "Force-killing mud process, please wait for 5 seconds...";
+				system("killall -s9 java");
+                                sleep(5);
+                        }
+                }
+        }
+}
+
 sub MainMenu
 {
 	my $WantRespawn="ON";
@@ -487,23 +531,7 @@ while (-1)
 	}
 	elsif ($menuselection eq "10")
 	{
-		my $running=`ps ax|grep coffee_mud|grep -v grep`;
-	        if ($running ne "")
-		{
-			# Process is running, kill it
-			system("killall java");
-			sleep(5);
-		}
-	}
-	elsif ($menuselection eq "forcekill")
-	{
-		my $running=`ps ax|grep coffee_mud|grep -v grep`;
-	        if ($running ne "")
-		{
-			# Process is running, kill it
-			system("killall --signal -9 java");
-			sleep(5);
-		}
+		ProcessKill();
 	}
 	elsif ($menuselection eq "11")
 	{
