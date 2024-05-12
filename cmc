@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.12.0";
+my $CMC_ver = "1.12.1";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -411,6 +411,7 @@ sub ProcessKill
 {
         while (-1)
         {
+		CheckServerStatus();
                 ProcesKillMenu();
                 if (($menuselection eq "CANCEL") || ($menuselection eq "ESC") || ($menuselection eq "") || ($menuselection eq "q") || ($menuselection eq "Q"))
                 {
@@ -418,19 +419,36 @@ sub ProcessKill
                 }
                 elsif ($menuselection eq "1")
                 {
-                        # Reset the server process
-                        print "Killing mud process, please wait...";
-                        system("killall java");
-			sleep(10);
+			if ($ServerStatus eq "Running")
+			{
+				# Reset the server process
+				print "Killing mud process, please wait...";
+				system("killall java");
+				sleep(10);
+			}
+			else
+			{
+				print "Process not running...";
+				sleep(3)
+			}
+
                 }
                 elsif ($menuselection eq "2")
                 {
                         # Force-kill server process
                         if ($d->yesno( text => "Confirm force-killing MUD process", text => "Are you *SURE* you want to force kill the MUD process?\nYou should first try the \#1 option and see if that works" ))
                         {
-                                print "Force-killing mud process, please wait for 5 seconds...";
-				system("killall -s9 java");
-                                sleep(5);
+				if ($ServerStatus eq "Running")
+				{
+					print "Force-killing mud process, please wait for 5 seconds...";
+					system("killall -s9 java");
+					sleep(5);
+				}
+				else
+				{
+					print "Process not running...";
+					sleep(3)
+				}
                         }
                 }
         }
