@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.12.1";
+my $CMC_ver = "1.12.2";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -477,7 +477,7 @@ sub MainMenu
                                       '11', 'Edit intro.txt',
                                       '12', 'Update Utils',
                                       '13', 'Update CoffeeMud',
-                                      '14', 'Connect MUD',
+                                      '14', 'Connect to MUD',
                                       '15', 'Edit Texts',
                                       'q', 'Quit CMC' ] );
 }
