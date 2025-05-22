@@ -29,7 +29,7 @@ my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.12.2";
+my $CMC_ver = "1.12.3";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -479,6 +479,7 @@ sub MainMenu
                                       '13', 'Update CoffeeMud',
                                       '14', 'Connect to MUD',
                                       '15', 'Edit Texts',
+                                      '16', 'Ubuntu Version',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -578,6 +579,14 @@ while (-1)
 	{
 		# Text File Menu
 		EditText();
+	}
+	elsif ($menuselection eq "16")
+	{
+		# Display Ubuntu version
+                system("clear");
+		system("./ubuntuversion");
+		print "Press Enter To Continue: ";
+		my $entered = <STDIN>;
 	}
 }
 
