@@ -584,7 +584,7 @@ while (-1)
 	{
 		# Display Ubuntu version
                 system("clear");
-		system("./ubuntuversion");
+		system("$CMCDir/ubuntuversion");
 		print "Press Enter To Continue: ";
 		my $entered = <STDIN>;
 	}
