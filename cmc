@@ -24,12 +24,16 @@ my $FAKEDBOLDDIR = "$COFFEEMUDDIR/oldcm/resources/fakedb";
 my $FAKEDBNEWDIR = "$COFFEEMUDDIR/resources/fakedb";
 my $UpdateStepsFile = "$CMCDir/UpdateSteps.txt";
 my $MigrateFakeDB = "$CMCDir/mudUpdate.sh";
+my $PagerCommand = "/usr/bin/less";
+my $TelnetCmd = "/usr/bin/telnet";
+my $DiskFreeCmd = "/usr/bin/df -h";
+my $MailQueueCmd = "/usr/bin/mailq";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.12.3";
+my $CMC_ver = "1.13.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -121,6 +125,73 @@ sub EditTextMenu
                                       '17', 'Stats',
                                       '18', 'Themes',
                                       'q', 'Main Menu' ] );
+}
+
+sub SystemUtilMenu
+{
+	my $WantRespawn="ON";
+	CheckServerStatus();
+	if (-f "$COFFEEMUDDIR/nostart")
+	{
+		$WantRespawn="OFF";
+	}
+	$menuselection = $d->menu( title => "System Utilities Menu", text => "Server is $ServerStatus and respawn is $WantRespawn - Select one:",
+                            list => [ '1', 'Linux Users',
+                                      '2', 'Active Processes',
+                                      '3', 'Login History',
+                                      '4', 'Disk Free',
+                                      '5', 'Mail Queue',
+                                      'q', 'Main Menu' ] );
+}
+
+sub SystemUtilities
+{
+	while (-1)
+	{
+		SystemUtilMenu();
+		if (($menuselection eq "CANCEL") || ($menuselection eq "ESC") || ($menuselection eq "") || ($menuselection eq "q") || ($menuselection eq "Q"))
+		{
+			return;
+		}
+		elsif ($menuselection eq "1")
+		{
+			# Who's logged in and system load
+			system("clear");
+                        system("w");
+                        print "Press Enter To Continue:";
+                        my $entered = <STDIN>;
+		}
+		elsif ($menuselection eq "2")
+		{
+			# Display active processes
+			system("clear");
+                        print "Press \"q\" To Exit. Press Enter To Continue:";
+                        my $entered = <STDIN>;
+                        system("top");
+		}
+		elsif ($menuselection eq "3")
+		{
+			# Linux Login History
+			system("clear");
+                        system("last | $PagerCommand");
+		}
+		elsif ($menuselection eq "4")
+		{
+			# Disk Space
+			system("clear");
+	                system("$DiskFreeCmd");
+                        print "Press Enter To Continue:";
+                        my $entered = <STDIN>;
+		}
+		elsif ($menuselection eq "5")
+		{
+			# Disk Space
+			system("clear");
+	                system("$MailQueueCmd");
+                        print "Press Enter To Continue:";
+                        my $entered = <STDIN>;
+		}
+	}
 }
 
 sub EditText
@@ -480,6 +551,7 @@ sub MainMenu
                                       '14', 'Connect to MUD',
                                       '15', 'Edit Texts',
                                       '16', 'Ubuntu Version',
+                                      '17', 'Utilities',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -571,7 +643,7 @@ while (-1)
 	{
 		# Telnet to MUD
                 system("clear");
-		system("telnet localhost $MUDPORT");
+		system("$TelnetCmd localhost $MUDPORT");
 		print "Press Enter To Continue: ";
 		my $entered = <STDIN>;
 	}
@@ -587,6 +659,11 @@ while (-1)
 		system("$CMCDir/ubuntuversion");
 		print "Press Enter To Continue: ";
 		my $entered = <STDIN>;
+	}
+	elsif ($menuselection eq "17")
+	{
+		# Run utilities
+		SystemUtilities();
 	}
 }
 
