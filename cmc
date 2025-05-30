@@ -671,6 +671,10 @@ while (-1)
 	{
 		# Run bash shell
 		system("clear");
+		print "About to spawn a shell. Enter \"exit\" to exit and return to CMC\n";
+		print "Press Enter To Continue:";
+		my $entered = <STDIN>;
+		system("clear");
 		chdir("$ENV{HOME}");
 		system("$ShellCommand");
 	}
