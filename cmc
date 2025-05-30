@@ -28,12 +28,13 @@ my $PagerCommand = "/usr/bin/less";
 my $TelnetCmd = "/usr/bin/telnet";
 my $DiskFreeCmd = "/usr/bin/df -h";
 my $MailQueueCmd = "/usr/bin/mailq";
+my $ShellCommand = "/usr/bin/bash";
 
 ###################################################
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.13.0";
+my $CMC_ver = "1.13.1";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -552,6 +553,7 @@ sub MainMenu
                                       '15', 'Edit Texts',
                                       '16', 'Ubuntu Version',
                                       '17', 'Utilities',
+                                      '18', 'Exit to Shell',
                                       'q', 'Quit CMC' ] );
 }
 
@@ -664,6 +666,13 @@ while (-1)
 	{
 		# Run utilities
 		SystemUtilities();
+	}
+	elsif ($menuselection eq "18")
+	{
+		# Run bash shell
+		system("clear");
+		chdir("$ENV{HOME}");
+		system("$ShellCommand");
 	}
 }
 
