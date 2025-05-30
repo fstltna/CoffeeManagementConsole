@@ -553,7 +553,7 @@ sub MainMenu
                                       '15', 'Edit Texts',
                                       '16', 'Ubuntu Version',
                                       '17', 'Utilities',
-                                      '18', 'Exit to Shell',
+                                      '18', 'Spawn Shell',
                                       'q', 'Quit CMC' ] );
 }
 
