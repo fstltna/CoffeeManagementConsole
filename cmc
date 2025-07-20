@@ -34,7 +34,7 @@ my $ShellCommand = "/usr/bin/bash";
 # No changes below here
 ###################################################
 
-my $CMC_ver = "1.13.1";
+my $CMC_ver = "1.14.0";
 my $Record = "false";	# Are results saved?
 my $TempDir = "/tmp";
 my $RobotName = "";
@@ -548,7 +548,7 @@ sub MainMenu
                                       '10', 'Kill MUD Process',
                                       '11', 'Edit intro.txt',
                                       '12', 'Update Utils',
-                                      '13', 'Update CoffeeMud',
+                                      'XXX', 'Update CoffeeMud',
                                       '14', 'Connect to MUD',
                                       '15', 'Edit Texts',
                                       '16', 'Ubuntu Version',
@@ -636,7 +636,7 @@ while (-1)
 		# Update Menu
 		UpdateTools();
 	}
-	elsif ($menuselection eq "13")
+	elsif ($menuselection eq "XXX")
 	{
 		# Update CoffeeMud
 		UpdateCM();
